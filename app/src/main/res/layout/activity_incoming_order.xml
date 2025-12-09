@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
-        android:id="@+id/orderTitle"
+        android:id="@+id/txtOrderTitle"
         android:text="Incoming Order"
-        android:textStyle="bold"
         android:textSize="22sp"
+        android:textStyle="bold"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/orderDetails"
-        android:text="Order details will appear here."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"/>
-
     <Button
         android:id="@+id/btnAccept"
-        android:text="Accept"
+        android:text="Accept Order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/btnDecline"
-        android:text="Decline"
+        android:id="@+id/btnReject"
+        android:text="Reject Order"
+        android:layout_marginTop="14dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
