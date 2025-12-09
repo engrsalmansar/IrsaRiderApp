@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Fix gradlew line endings
+        run: sed -i 's/\r$//' gradlew
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
