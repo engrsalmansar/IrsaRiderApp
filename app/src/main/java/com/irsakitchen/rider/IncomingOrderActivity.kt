@@ -1,69 +1,58 @@
 package com.irsakitchen.rider
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import java.io.IOException
 
 class IncomingOrderActivity : AppCompatActivity() {
 
-    private val baseUrl = "https://irsakitchen.com"
-    private val client = OkHttpClient()
+    private lateinit var txtOrderTitle: TextView
+    private lateinit var btnAccept: Button
+    private lateinit var btnReject: Button  // corrected name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incoming_order)
 
-        val orderId = intent.getStringExtra("order_id") ?: "0"
-        val txt = findViewById<TextView>(R.id.txtOrderTitle)
-        txt.text = "Order #$orderId"
+        txtOrderTitle = findViewById(R.id.txtOrderTitle)
+        btnAccept = findViewById(R.id.btnAccept)
+        btnReject = findViewById(R.id.btnReject)  // fixed ID
 
-        val accept = findViewById<Button>(R.id.btnAccept)
-        val decline = findViewById<Button>(R.id.btnDecline)
+        txtOrderTitle.text = "You have a new order!"
 
-        accept.setOnClickListener {
-            stopRingtone()
-
-            val prefs = getSharedPreferences("rider_prefs", Context.MODE_PRIVATE)
-            val code = prefs.getInt("assign_id", 0)
-
-            val json = JSONObject()
-            json.put("id", orderId)
-            json.put("rider_code", code)
-
-            val body = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                json.toString()
-            )
-
-            val req = Request.Builder()
-                .url("$baseUrl/accept.php")
-                .post(body)
-                .build()
-
-            client.newCall(req).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    finish()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    finish()
-                }
-            })
+        btnAccept.setOnClickListener {
+            sendResponse(true)
         }
 
-        decline.setOnClickListener {
-            stopRingtone()
-            finish()
+        btnReject.setOnClickListener {  // corrected
+            sendResponse(false)
         }
     }
 
-    private fun stopRingtone() {
-        val service = Intent(this, RingtoneService::class.java)
-        stopService(service)
+    private fun sendResponse(accepted: Boolean) {
+        val url = "https://irsakitchen.com/api/rider_order_response.php"
+
+        val json = JSONObject()
+        json.put("accepted", accepted)
+
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),  // fixed import usage
+            json.toString()
+        )
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {}
+            override fun onResponse(call: Call, response: Response) {}
+        })
     }
 }
