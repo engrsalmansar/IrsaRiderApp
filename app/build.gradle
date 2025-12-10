@@ -1,11 +1,11 @@
-// Module-level build.gradle (app)
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+}
 
 android {
-    namespace 'com.irsakitchen.rider'
+    namespace "com.irsakitchen.rider"
     compileSdk 34
 
     defaultConfig {
@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -23,32 +23,51 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
 
-    // AndroidX base
+    // ------------------------------------------------
+    // Firebase Messaging (required for background push)
+    // ------------------------------------------------
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
+    implementation 'com.google.firebase:firebase-messaging'
+
+    // ------------------------------------------------
+    // OkHttp (required for toMediaTypeOrNull)
+    // ------------------------------------------------
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+
+    // ------------------------------------------------
+    // AndroidX Core Libraries
+    // ------------------------------------------------
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // Firebase BOM and messaging
-    implementation platform('com.google.firebase:firebase-bom:33.1.0')
-    implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Optional (for future screens)
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
 
-    // OKHttp for calling your PHP APIs
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    // Allows large apps
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'
