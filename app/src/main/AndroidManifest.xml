@@ -13,7 +13,7 @@
     <!-- Notification permission for Android 13+ -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Foreground service for persistent ringing (if needed later) -->
+    <!-- Foreground service for persistent ringing (future use) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -23,9 +23,9 @@
         android:roundIcon="@android:mipmap/sym_def_app_icon"
         android:allowBackup="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IrsaRider">
+        android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
 
-        <!-- Firebase Messaging -->
+        <!-- Firebase Messaging service -->
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -34,7 +34,7 @@
             </intent-filter>
         </service>
 
-        <!-- MAIN LOGIN SCREEN -->
+        <!-- MAIN screen: rider enters assign ID, sees status etc. -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
 
-        <!-- INCOMING ORDER SCREEN -->
+        <!-- Screen that pops up on incoming order (from FCM) -->
         <activity
             android:name=".IncomingOrderActivity"
             android:exported="false" />
