@@ -26,11 +26,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+- name: Build Release APK
+  run: ./gradlew assembleRelease
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: IrsaRiderApp-debug
-          path: app/build/outputs/apk/debug/*.apk
+- name: Upload APK
+  uses: actions/upload-artifact@v4
+  with:
+    name: IrsaRiderApp-release
+    path: app/build/outputs/apk/release/app-release.apk
+
