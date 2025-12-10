@@ -16,24 +16,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2) Set up JDK 17 (needed for latest Android Gradle Plugin)
+      # 2) Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3) Make Gradle wrapper executable
+      # 3) FIX Windows CRLF -> Unix LF in gradlew (fixes sh\r error)
+      - name: Fix gradlew line endings
+        run: |
+          sed -i 's/\r$//' gradlew
+
+      # 4) Make Gradle wrapper executable
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4) Build RELEASE APK
+      # 5) Build RELEASE APK
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      # 5) Upload APK from app module
+      # 6) Upload APK artifact
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
           name: IrsaRiderApp-release
           path: app/build/outputs/apk/release/app-release.apk
+
