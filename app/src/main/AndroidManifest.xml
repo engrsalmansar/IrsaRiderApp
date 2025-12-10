@@ -1,25 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.irsakitchen.rider"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.irsakitchen.rider">
+
+    <!-- Internet + network access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Firebase messaging -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- Notification permission for Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Foreground service for persistent ringing (if needed later) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-    android:name=".RiderApp"
-    android:icon="@android:mipmap/sym_def_app_icon"
-    android:roundIcon="@android:mipmap/sym_def_app_icon"
-    android:label="Irsa Rider"
-    android:theme="@style/Theme.IrsaRider">
+        android:name=".RiderApp"
+        android:label="Irsa Rider"
+        android:icon="@android:mipmap/sym_def_app_icon"
+        android:roundIcon="@android:mipmap/sym_def_app_icon"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.IrsaRider">
 
+        <!-- Firebase Messaging -->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- MAIN LOGIN SCREEN -->
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.IrsaKitchenRider">
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- INCOMING ORDER SCREEN -->
+        <activity
+            android:name=".IncomingOrderActivity"
+            android:exported="false" />
 
     </application>
 
 </manifest>
-
