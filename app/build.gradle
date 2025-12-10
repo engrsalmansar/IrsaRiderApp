@@ -10,21 +10,30 @@ android {
 
     defaultConfig {
         applicationId "com.irsakitchen.rider"
-        minSdk 23
+        minSdk 21
         targetSdk 34
         versionCode 1
         versionName "1.0"
 
+        // For FCM data messages etc.
         multiDexEnabled true
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
         debug {
+            // Separate id if you ever install debug + release side by side
+            applicationIdSuffix ".debug"
             debuggable true
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // We keep it simple for now (no shrinking/obfuscation)
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Use debug keystore so GitHub Actions can sign it automatically
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -32,9 +41,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = '17'
     }
 
     buildFeatures {
@@ -43,31 +51,15 @@ android {
 }
 
 dependencies {
-
-    // ------------------------------------------------
-    // Firebase Messaging (required for background push)
-    // ------------------------------------------------
-    implementation platform('com.google.firebase:firebase-bom:33.1.0')
-    implementation 'com.google.firebase:firebase-messaging'
-
-    // ------------------------------------------------
-    // OkHttp (required for toMediaTypeOrNull)
-    // ------------------------------------------------
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-
-    // ------------------------------------------------
-    // AndroidX Core Libraries
-    // ------------------------------------------------
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // Optional (for future screens)
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    // Firebase BOM + Messaging
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
-    // Allows large apps
-    implementation 'androidx.multidex:multidex:2.0.1'
+    // OkHttp (for calling your PHP endpoints)
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
-
-apply plugin: 'com.google.gms.google-services'
